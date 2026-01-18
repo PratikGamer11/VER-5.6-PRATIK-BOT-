@@ -5,7 +5,7 @@ const mineflayer = require('mineflayer');
 const CONFIG = {
     SERVER_IP: 'Nightshade1003.aternos.m',       // e.g., 'play.example.com' or 'localhost'
     PORT: 23136,                       // Default Minecraft port
-    BOT_NAME: 'PratiksBot',            // Your bot's username
+    BOT_NAME: 'pratikbot',            // Your bot's username
     PASSWORD: '41234',      // Password for register/login
     VERSION: '1.20.1',                 // Minecraft version
     
@@ -258,4 +258,5 @@ new MinecraftBot();
 process.on('SIGINT', () => {
     console.log('\nShutting down bot...');
     process.exit();
+
 });
