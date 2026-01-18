@@ -1,0 +1,47 @@
+name: Keep Bot Alive
+on:
+  schedule:
+    - cron: '*/5 * * * *'  # Runs every 5 minutes
+  workflow_dispatch:  # Manual trigger
+  push:  # Runs on code push
+    branches: [ main ]
+
+jobs:
+  keep-alive:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10  # Maximum runtime per job
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+      
+    - name: Setup Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '18'
+        
+    - name: Install dependencies
+      run: npm ci
+      
+    - name: Run Minecraft Bot
+      env:
+        SERVER_IP: ${{ secrets.SERVER_IP }}
+        BOT_PASSWORD: ${{ secrets.BOT_PASSWORD }}
+      run: |
+        # Create config file from environment variables
+        cat > config.js << 'EOF'
+        module.exports = {
+          SERVER_IP: process.env.SERVER_IP || 'YOUR_SERVER_IP',
+          PORT: 25565,
+          BOT_NAME: 'GitHubBot',
+          PASSWORD: process.env.BOT_PASSWORD || 'default_password',
+          VERSION: '1.20.1'
+        };
+        EOF
+        
+        # Modify bot.js to use config
+        sed -i "s/YOUR_SERVER_IP/' + (process.env.SERVER_IP || 'localhost') + '/" bot.js
+        sed -i "s/your_password123/' + (process.env.BOT_PASSWORD || 'password123') + '/" bot.js
+        
+        # Run the bot for 4 minutes
+        timeout 240 node bot.js || true
