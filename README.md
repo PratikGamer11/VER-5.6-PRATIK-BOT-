@@ -10,4 +10,5 @@ This bot automatically connects to Minecraft servers and handles /register and /
    - `SERVER_IP`: Your Minecraft server IP
    - `BOT_PASSWORD`: Password for register/login
 4. Enable Actions in repository settings
+
 5. The bot will run automatically every 5 minutes
